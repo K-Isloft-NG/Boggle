@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/">
+  <siteinfo>
+    <sitename>Wiktionnaire</sitename>
+    <dbname>frwiktionary</dbname>
+    <base>https://fr.wiktionary.org/wiki/Wiktionnaire:Accueil</base>
+    <generator>MediaWiki 1.46</generator>
+    <case>case-sensitive</case>
+    <namespaces>
+      <namespace key="0" case="case-sensitive" />
+      <namespace key="1" case="first-letter">Discussion</namespace>
+      <namespace key="2" case="first-letter">Utilisateur</namespace>
+      <namespace key="4" case="first-letter">Wiktionnaire</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>plage</title>
+    <ns>0</ns>
+    <id>1</id>
+    <revision>
+      <id>201</id>
+      <parentid>101</parentid>
+      <timestamp>2026-11-15T12:00:00Z</timestamp>
+      <contributor><username>Exemple</username><id>42</id></contributor>
+      <comment>Révision de la page</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve">== {{langue|fr}} ==
+=== {{S|nom|fr}} ===
+'''plage''' {{pron|plaʒ|fr}} {{f}}
+# [[étendue|Étendue]] de [[sable]] ou de [[galet]]s bordant un plan d’[[eau]].
+#* ''Une plage de sable fin.''
+# Partie d’un tout, a &amp; b, &lt;ref&gt;note&lt;/ref&gt;.
+== {{langue|de}} ==
+=== {{S|verbe|de}} ===
+# [[plagen|Conjugaison]] allemande.</text>
+      <sha1>0000000000000000000000000000000</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>congrès</title>
+    <ns>0</ns>
+    <id>2</id>
+    <revision>
+      <id>202</id>
+      <parentid>102</parentid>
+      <timestamp>2026-11-15T12:00:00Z</timestamp>
+      <contributor><username>Exemple</username><id>42</id></contributor>
+      <comment>Révision de la page</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve">== {{langue|fr}} ==
+=== {{S|nom|fr}} ===
+# Assemblée de représentants.</text>
+      <sha1>0000000000000000000000000000000</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Congrès</title>
+    <ns>0</ns>
+    <id>3</id>
+    <revision>
+      <id>203</id>
+      <parentid>103</parentid>
+      <timestamp>2026-11-15T12:00:00Z</timestamp>
+      <contributor><username>Exemple</username><id>42</id></contributor>
+      <comment>Révision de la page</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve">== {{langue|fr}} ==
+=== {{S|nom|fr}} ===
+# Réunion des parlementaires.</text>
+      <sha1>0000000000000000000000000000000</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>congres</title>
+    <ns>0</ns>
+    <id>4</id>
+    <revision>
+      <id>204</id>
+      <parentid>104</parentid>
+      <timestamp>2026-11-15T12:00:00Z</timestamp>
+      <contributor><username>Exemple</username><id>42</id></contributor>
+      <comment>Révision de la page</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve">== {{langue|fr}} ==
+=== {{S|nom|fr}} ===
+# Pluriel de congre</text>
+      <sha1>0000000000000000000000000000000</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>aujourd'hui</title>
+    <ns>0</ns>
+    <id>5</id>
+    <revision>
+      <id>205</id>
+      <parentid>105</parentid>
+      <timestamp>2026-11-15T12:00:00Z</timestamp>
+      <contributor><username>Exemple</username><id>42</id></contributor>
+      <comment>Révision de la page</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve">== {{langue|fr}} ==
+=== {{S|nom|fr}} ===
+# Jour où l’on se trouve.</text>
+      <sha1>0000000000000000000000000000000</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>cœur</title>
+    <ns>0</ns>
+    <id>6</id>
+    <revision>
+      <id>206</id>
+      <parentid>106</parentid>
+      <timestamp>2026-11-15T12:00:00Z</timestamp>
+      <contributor><username>Exemple</username><id>42</id></contributor>
+      <comment>Révision de la page</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve">== {{langue|fr}} ==
+=== {{S|nom|fr}} ===
+# Organe de la circulation sanguine.</text>
+      <sha1>0000000000000000000000000000000</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Discussion:plage</title>
+    <ns>1</ns>
+    <id>7</id>
+    <revision>
+      <id>207</id>
+      <parentid>107</parentid>
+      <timestamp>2026-11-15T12:00:00Z</timestamp>
+      <contributor><username>Exemple</username><id>42</id></contributor>
+      <comment>Révision de la page</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve">Discussion sur la page plage.</text>
+      <sha1>0000000000000000000000000000000</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Utilisateur:Exemple</title>
+    <ns>2</ns>
+    <id>8</id>
+    <revision>
+      <id>208</id>
+      <parentid>108</parentid>
+      <timestamp>2026-11-15T12:00:00Z</timestamp>
+      <contributor><username>Exemple</username><id>42</id></contributor>
+      <comment>Révision de la page</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve">Page personnelle.</text>
+      <sha1>0000000000000000000000000000000</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Wiktionnaire:Accueil</title>
+    <ns>4</ns>
+    <id>9</id>
+    <revision>
+      <id>209</id>
+      <parentid>109</parentid>
+      <timestamp>2026-11-15T12:00:00Z</timestamp>
+      <contributor><username>Exemple</username><id>42</id></contributor>
+      <comment>Révision de la page</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve">Accueil du projet.</text>
+      <sha1>0000000000000000000000000000000</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>ancien</title>
+    <ns>0</ns>
+    <id>10</id>
+    <redirect title="plage" />
+    <revision>
+      <id>210</id>
+      <parentid>110</parentid>
+      <timestamp>2026-11-15T12:00:00Z</timestamp>
+      <contributor><username>Exemple</username><id>42</id></contributor>
+      <comment>Révision de la page</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve">#REDIRECTION [[plage]]</text>
+      <sha1>0000000000000000000000000000000</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>vide</title>
+    <ns>0</ns>
+    <id>11</id>
+    <revision>
+      <id>211</id>
+      <parentid>111</parentid>
+      <timestamp>2026-11-15T12:00:00Z</timestamp>
+      <contributor><username>Exemple</username><id>42</id></contributor>
+      <comment>Révision de la page</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="0" xml:space="preserve" />
+      <sha1>0000000000000000000000000000000</sha1>
+    </revision>
+  </page>
+</mediawiki>
