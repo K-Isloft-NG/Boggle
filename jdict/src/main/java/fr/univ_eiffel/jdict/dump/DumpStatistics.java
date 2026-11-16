@@ -36,7 +36,7 @@ public final class DumpStatistics {
     /** Lit un dump sur l'entrée standard et affiche ses statistiques. */
     public static void main(String[] args) {
         long start = System.nanoTime();
-        PrintStream diagnostics = new PrintStream(System.err, true, StandardCharsets.UTF_8);
+        PrintStream diagnostics = System.err;
         boolean rawXml = args.length > 0 && "xml".equals(args[0]);
         String summary;
         try (DumpReader reader = rawXml ? new DumpReader(System.in) : DumpReader.fromBzip2(System.in)) {
@@ -48,7 +48,7 @@ public final class DumpStatistics {
         }
         System.out.writeBytes(summary.getBytes(StandardCharsets.UTF_8));
         double seconds = (System.nanoTime() - start) / 1_000_000_000.0;
-        diagnostics.printf(Locale.ROOT, "Durée : %.3f s\n", seconds);
+        diagnostics.printf(Locale.ROOT, "Duree : %.3f s\n", seconds);
     }
 
     private static final class Statistics {
