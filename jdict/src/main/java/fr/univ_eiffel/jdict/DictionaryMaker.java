@@ -8,11 +8,11 @@ import fr.univ_eiffel.jdict.model.DefinitionFileHeader;
 import fr.univ_eiffel.jdict.store.DefinitionFileWriter;
 import fr.univ_eiffel.jdict.store.JsonEntrySerializer;
 import fr.univ_eiffel.jdict.store.PlainCodec;
+import fr.univ_eiffel.jdict.text.ConsoleMessages;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.Clock;
 
@@ -39,7 +39,7 @@ public final class DictionaryMaker {
         try {
             extractor = LanguageExtractors.forCode(args[0]);
         } catch (IllegalArgumentException error) {
-            err.print(ascii(error.getMessage()) + "\n");
+            err.print(ConsoleMessages.ascii(error.getMessage()) + "\n");
             return 2;
         }
 
@@ -51,15 +51,11 @@ public final class DictionaryMaker {
             report = new DictionaryBuilder().build(reader, extractor, writer,
                     pages -> err.print("Pages lues : " + pages + "\n"));
         } catch (IOException error) {
-            err.print("Erreur : " + ascii(error.getMessage()) + "\n");
+            err.print("Erreur : " + ConsoleMessages.ascii(error.getMessage()) + "\n");
             return 1;
         }
 
         err.print("Termine : " + report.pages() + " pages lues, " + report.entries() + " entrees ecrites\n");
         return 0;
-    }
-
-    private static String ascii(String message) {
-        return new String(String.valueOf(message).getBytes(StandardCharsets.US_ASCII), StandardCharsets.US_ASCII);
     }
 }
