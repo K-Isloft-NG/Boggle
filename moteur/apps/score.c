@@ -1,13 +1,14 @@
-#include <string.h>
 #include <stdio.h>
-#include "boggle.h" 
+#include "author.h"
+#include "boggle.h"
 
-int main(int argc, char* argv[]) {
-    if (argc==2 && strcmp("author", argv[1])==0){
-      printf("Auteur: <votre nom ici>\n");
-      return 255; 
+// Calcule le score des mots reçus en arguments.
+int main(int argc, char *argv[]) {
+    if (traiter_auteur(argc, argv)) {
+        return CODE_RETOUR_AUTEUR;
     }
-    char** mots = &argv[1];  //tous les paramètres passés sauf le premier
-    int nombre = argc-1;     //le nombre de mots en paramètre
+    char **mots = &argv[1];
+    int nombre = argc - 1;
     printf("%d\n", score(mots, nombre));
+    return 0;
 }
