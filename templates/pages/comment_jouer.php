@@ -1,5 +1,6 @@
 <?php
 use Boogle\Core\Session;
+use Boogle\Service\ReglesJeu;
 
 // Exemple : A, N, E forment le mot ANE ; les cases se touchent en diagonale.
 $lettres = GRILLE_DEMO;
@@ -23,7 +24,7 @@ $description = 'Grille de 16 lettres où les cases A, N et E sont mises en évid
 
     <h2>Les mots acceptés</h2>
     <ul>
-        <li>Un mot compte au moins 3 lettres.</li>
+        <li>Un mot compte au moins <?= e(ReglesJeu::LONGUEUR_MINIMALE_MOT) ?> lettres. Les cases QU comptent pour deux lettres.</li>
         <li>Il doit figurer dans le dictionnaire du jeu.</li>
         <li>Les accents ne sont pas à saisir : le mot ÂNE s’écrit ANE.</li>
     </ul>

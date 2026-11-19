@@ -5,6 +5,7 @@
  */
 
 use Boogle\Core\Csrf;
+use Boogle\Service\ReglesJeu;
 
 // Grille de démonstration : les cases actives forment le mot BOOGLE.
 $lettres = GRILLE_DEMO;
@@ -75,7 +76,7 @@ $description = 'Exemple de grille de 16 lettres où le mot BOOGLE est formé ave
         <li>
             <span class="etapes-numero">03</span>
             <h3>Des points</h3>
-            <p>Chaque mot de 3 lettres ou plus rapporte des points.</p>
+            <p>Chaque mot de <?= e(ReglesJeu::LONGUEUR_MINIMALE_MOT) ?> lettres ou plus rapporte des points.</p>
         </li>
     </ol>
 </section>
