@@ -1,0 +1,4 @@
+# Fichiers produits par make (moteur C)
+bin/
+obj/
+*.lex
