@@ -1,9 +1,6 @@
 #pragma once
 
-// Codes de retour pour les anomalies.
-#define ERREUR_PARAMETRES 255
-#define ERREUR_FICHIER 254
-#define ERREUR_CONTENU 253
+#include "codes.h"
 
 // Un symbole et son poids dans le tirage.
 typedef struct {
