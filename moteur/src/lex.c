@@ -1,3 +1,5 @@
+#include <assert.h>
+#include <stdlib.h>
 #include <string.h>
 #include "codes.h"
 #include "lex.h"
@@ -62,6 +64,12 @@ int lire_entete(FILE *f, EnteteLex *h) {
     return taille == attendue ? 0 : ERREUR_CONTENU;
 }
 
+// Les liens d'un parcours préfixe pointent toujours vers l'avant.
+static int liens_valides(const CelluleLex *c, int num, int nbCellules) {
+    return (c->fils == ABSENT_LEX || (num < c->fils && c->fils < nbCellules)) &&
+           (c->frere == ABSENT_LEX || (num < c->frere && c->frere < nbCellules));
+}
+
 // Accède à une cellule par son déplacement depuis le début du fichier.
 int lire_cellule(FILE *f, const EnteteLex *h, int num, CelluleLex *c) {
     if (num < 0 || num >= h->nbCellules) return ERREUR_CONTENU;
@@ -69,11 +77,36 @@ int lire_cellule(FILE *f, const EnteteLex *h, int num, CelluleLex *c) {
     if (fseek(f, position, SEEK_SET) != 0) return ERREUR_CONTENU;
     if (fread(c, sizeof(*c), 1, f) != 1) return ERREUR_CONTENU;
 
-    // Les liens d'un parcours préfixe pointent toujours vers l'avant.
-    if ((c->fils != ABSENT_LEX && (c->fils <= num || c->fils >= h->nbCellules)) ||
-        (c->frere != ABSENT_LEX && (c->frere <= num || c->frere >= h->nbCellules))) {
+    return liens_valides(c, num, h->nbCellules) ? 0 : ERREUR_CONTENU;
+}
+
+// Charge toutes les cellules et vérifie leurs liens avant utilisation.
+int charger_cellules(FILE *f, const EnteteLex *h, CelluleLex **cellules) {
+    assert(f != NULL);
+    assert(h != NULL);
+    assert(cellules != NULL);
+
+    *cellules = NULL;
+    if (h->nbCellules < 1 || fseek(f, h->tailleEntete, SEEK_SET) != 0)
+        return ERREUR_CONTENU;
+
+    size_t nombre = (size_t) h->nbCellules;
+    if (nombre > (size_t) -1 / sizeof(CelluleLex)) return ERREUR_FICHIER;
+    CelluleLex *donnees = malloc(nombre * sizeof(*donnees));
+    if (donnees == NULL) return ERREUR_FICHIER;
+
+    if (fread(donnees, sizeof(*donnees), nombre, f) != nombre) {
+        free(donnees);
         return ERREUR_CONTENU;
     }
+    for (int i = 0; i < h->nbCellules; i++) {
+        if (!liens_valides(&donnees[i], i, h->nbCellules)) {
+            free(donnees);
+            return ERREUR_CONTENU;
+        }
+    }
+
+    *cellules = donnees;
     return 0;
 }
 

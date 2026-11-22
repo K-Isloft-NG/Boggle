@@ -36,5 +36,8 @@ int lire_entete(FILE *f, EnteteLex *h);
 // Lit la cellule désignée par son numéro.
 int lire_cellule(FILE *f, const EnteteLex *h, int num, CelluleLex *c);
 
+// Charge toutes les cellules et vérifie leurs liens.
+int charger_cellules(FILE *f, const EnteteLex *h, CelluleLex **cellules);
+
 // Recherche un mot à partir du numéro de la première cellule.
 int statut_mot(FILE *f, const EnteteLex *h, int num, const char *mot);
