@@ -50,7 +50,9 @@ bin/grid_build frequences.txt 4 4
 G A I R R U V E QU E O T A S M J
 ```
 
-Tire une grille aléatoire de 4 lignes et 4 colonnes et l'affiche sur une ligne. Chaque ligne de `frequences.txt` contient un symbole (une ou deux lettres majuscules) et son poids (entier de 0 à 999 999 999), par exemple `A 36` ou `QU 26`. La somme des poids doit être positive. Dimensions acceptées : de 1 à 1000.
+Tire une grille aléatoire de 4 lignes et 4 colonnes et l'affiche sur une ligne. Chaque ligne de `frequences.txt` contient un symbole (une ou deux lettres majuscules) et son poids (entier de 0 à 999 999 999), par exemple `A 36` ou `QU 26`. La somme des poids doit être positive.
+
+Les deux nombres sont la hauteur (nombre de lignes) puis la largeur (nombre de colonnes). Dimensions acceptées, pour tous les exécutables qui prennent une grille : de 1 à 1000. Cette borne évite tout dépassement d'entier à la lecture et garde une mémoire raisonnable (un million de cases au plus), bien au-delà des grilles de jeu (4 x 4 ou 5 x 5).
 
 ### grid_path
 
@@ -59,7 +61,7 @@ bin/grid_path OUI 4 4 G A I R R U V E QU E O T A S M J
 10 5 2
 ```
 
-Cherche le mot dans la grille, chaque case étant utilisée au plus une fois et deux cases successives étant voisines (8 directions). Si le mot est trouvé, affiche les indices des cases du chemin et renvoie `0` ; sinon, n'affiche rien et renvoie `1`.
+Paramètres : le mot, la hauteur et la largeur de la grille, puis les cases ligne par ligne. Cherche le mot dans la grille, chaque case étant utilisée au plus une fois et deux cases successives étant voisines (8 directions). Si le mot est trouvé, affiche les indices des cases du chemin et renvoie `0` ; sinon, n'affiche rien et renvoie `1`.
 
 ### solve
 
@@ -67,6 +69,8 @@ Cherche le mot dans la grille, chaque case étant utilisée au plus une fois et 
 bin/solve dico.lex 3 4 4 G A I R R U V E QU E O T A S M J
 OUI VIE VIRE ...
 ```
+
+Paramètres : le dictionnaire binaire, la longueur minimale des mots (ici `3`), la hauteur et la largeur de la grille (ici `4 4`), puis les cases ligne par ligne.
 
 Affiche sur une ligne tous les mots du dictionnaire présents dans la grille et d'au moins 3 lettres (`QU` compte pour deux lettres), chacun une seule fois. La recherche parcourt la grille et l'arbre en même temps et abandonne un chemin dès que son préfixe n'existe plus dans le dictionnaire. Pour le dictionnaire complet : environ 0,02 s et 38 Mo de mémoire pour une grille 4 x 4.
 
