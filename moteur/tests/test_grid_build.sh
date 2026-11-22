@@ -60,6 +60,9 @@ verifier "fichier vide" "" 253 bin/grid_build tests/freq_vide.txt 4 4
 verifier "poids négatif" "" 253 bin/grid_build tests/freq_negatif.txt 4 4
 verifier "total nul" "" 253 bin/grid_build tests/freq_total_nul.txt 4 4
 verifier "symbole trop long" "" 253 bin/grid_build tests/freq_symbole_long.txt 4 4
+verifier "poids de neuf chiffres" "A" 0 bin/grid_build tests/freq_neuf_chiffres.txt 1 1
+verifier "poids de dix chiffres" "" 253 bin/grid_build tests/freq_dix_chiffres.txt 1 1
+verifier "ligne trop longue" "" 253 bin/grid_build tests/freq_ligne_longue.txt 1 1
 fichier_reel="../../ressources/instructions/module_L1/moduleL1Bis_R3.03_Analyse/03_donnees/sorties/chartable.txt"
 if [ -f "$fichier_reel" ]; then
     verifier_grille "grille réelle 4 par 4" 4 4

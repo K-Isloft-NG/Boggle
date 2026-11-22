@@ -1,19 +1,15 @@
 #!/bin/bash
 cd "$(dirname "$0")/.." || exit 1
 source_mots="../../ressources/instructions/module_L1/moduleL1Bis_R3.03_Analyse/03_donnees/sorties/words.txt"
-if [ ! -f "$source_mots" ]; then
-    echo "IGNORE dictionnaire réel introuvable"
-    exit 0
-fi
-
+if [ ! -f "$source_mots" ]; then echo "IGNORE dictionnaire réel introuvable"; exit 0; fi
 tmp=$(mktemp -d "$PWD/obj/charge.XXXXXX") || exit 1
 trap 'rm -rf -- "$tmp"' EXIT
+export LC_ALL=C
 lex="$tmp/words.lex"
 reussites=0
 echecs=0
-export LC_ALL=C
 
-# Compare le statut obtenu au statut calculé depuis le fichier texte.
+# Compare la recherche au statut calculé depuis le fichier texte.
 verifier() {
     local mot=$1 attendu=$2 code=0
     bin/dictionnary_lookup "$lex" "$mot" > "$tmp/sortie" || code=$?
@@ -33,7 +29,6 @@ else
     time bin/dictionnary_build "$source_mots" "$lex" || exit 1
     echo "Mémoire maximale : /usr/bin/time indisponible"
 fi
-
 read -r entete < <(od -An -t d4 -j 0 -N 4 "$lex")
 read -r mots < <(od -An -t d4 -j 4 -N 4 "$lex")
 read -r cellules < <(od -An -t d4 -j 8 -N 4 "$lex")
@@ -47,29 +42,41 @@ if [ "$entete" != 16 ] || [ "$mots" != 1551367 ] || [ "$cellules" != 3067074 ] |
     echecs=$((echecs + 1))
 fi
 
-TIMEFORMAT='Temps des recherches et des comparaisons : %3R s'
+# Une lecture mémorise les mots, puis détermine les statuts des variantes.
+awk '
+    { dictionnaire[$0] = 1 }
+    NR % 5000 == 0 && nombre < 300 { echantillon[++nombre] = $0 }
+    END {
+        for (i = 1; i <= nombre; i++) {
+            variante = echantillon[i] "Q"
+            variantes[variante] = 1
+            longueurs[length(variante)] = 1
+        }
+        for (mot in dictionnaire) {
+            for (longueur in longueurs) {
+                if (length(mot) >= longueur) {
+                    debut = substr(mot, 1, longueur)
+                    if (debut in variantes) prefixe[debut] = 1
+                }
+            }
+        }
+        for (i = 1; i <= nombre; i++) {
+            mot = echantillon[i]
+            court = substr(mot, 1, length(mot) - 1)
+            variante = mot "Q"
+            statut_court = (court in dictionnaire) ? 0 : 1
+            statut_variante = (variante in dictionnaire) ? 0 : ((variante in prefixe) ? 1 : 2)
+            print mot, court, statut_court, variante, statut_variante
+        }
+    }
+' "$source_mots" > "$tmp/attendus" || exit 1
 nombre=0
-time while IFS= read -r mot; do
+while read -r mot court statut_court variante statut_variante; do
     verifier "$mot" 0
-    prefixe=${mot%?}
-    if grep -Fxq -- "$prefixe" "$source_mots"; then
-        verifier "$prefixe" 0
-    else
-        verifier "$prefixe" 1
-    fi
-    variante=$mot"Q"
-    if grep -Fxq -- "$variante" "$source_mots"; then
-        verifier "$variante" 0
-    elif [ "$(grep -c "^$variante" "$source_mots")" -gt 0 ]; then
-        verifier "$variante" 1
-    else
-        verifier "$variante" 2
-    fi
+    verifier "$court" "$statut_court"
+    verifier "$variante" "$statut_variante"
     nombre=$((nombre + 1))
-done < <(awk 'NR % 5000 == 0 { print; if (++pris == 300) exit }' "$source_mots")
-if [ "$nombre" -ne 300 ]; then
-    echo "ECHEC taille de l'échantillon"
-    echecs=$((echecs + 1))
-fi
+done < "$tmp/attendus"
+if [ "$nombre" -ne 300 ]; then echo "ECHEC taille de l'échantillon"; echecs=$((echecs + 1)); fi
 printf 'Mots échantillonnés : %s, réussites : %s, échecs : %s\n' "$nombre" "$reussites" "$echecs"
 [ "$echecs" -eq 0 ]
