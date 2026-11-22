@@ -1,0 +1,9 @@
+AA
+BONJOUR ## un commentaire
+BON
+BONNE
+ LIGNE IGNOREE
+BONJOUR
+CAFE
+QUE
+zoo
