@@ -1,63 +1,48 @@
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "codes.h"
 #include "dictionnaire.h"
 
-// Mesure les lignes et repère les octets nuls pouvant se trouver dans une ligne.
-static int mesurer_lignes(FILE *fichier, int *maximum, int *contientNul) {
-    const int maxInt = (int)(~0u >> 1);
-    int longueur = 0;
+// Mesure la plus longue ligne pour adapter le tampon de lecture.
+static int mesurer_lignes(FILE *fichier, size_t *maximum) {
+    size_t longueur = 0;
     int c;
     while ((c = fgetc(fichier)) != EOF) {
         if (c == '\n') {
             longueur = 0;
         } else {
-            // Deux octets restent nécessaires pour le saut de ligne et le zéro final.
-            if (longueur == maxInt - 2) return ERREUR_CONTENU;
+            if (longueur == (size_t) INT_MAX - 2) return ERREUR_CONTENU;
             longueur++;
             if (longueur > *maximum) *maximum = longueur;
-            if (c == '\0') *contientNul = 1;
         }
     }
     return ferror(fichier) ? ERREUR_FICHIER : 0;
 }
 
 // Repère et termine le premier mot si toutes ses lettres sont valides.
-static int isoler_mot(char *ligne, long longueur) {
-    long i = 0;
+static int isoler_mot(char *ligne) {
+    size_t i = 0;
+    size_t longueur = strlen(ligne);
     while (i < longueur && ligne[i] != ' ' && ligne[i] != '\t' &&
            ligne[i] != '\r' && ligne[i] != '\n') {
         if (ligne[i] < 'A' || ligne[i] > 'Z') return 0;
         i++;
     }
-
     ligne[i] = '\0';
     return i > 0;
 }
 
 // Lit les lignes entières et ajoute les mots valides au Trie.
-static int lire_mots(FILE *fichier, char *ligne, int capacite, int contientNul,
-                     Trie *t, int *nbMots) {
-    const int maxInt = (int)(~0u >> 1);
-    long position = 0;
+static int lire_mots(FILE *fichier, char *ligne, int capacite, Trie *t, int *nbMots) {
     while (fgets(ligne, capacite, fichier) != NULL) {
-        long longueur = 0;
-        if (contientNul) {
-            // La position distingue un zéro du fichier du zéro ajouté par fgets.
-            long fin = ftell(fichier);
-            if (fin < position) return ERREUR_FICHIER;
-            longueur = fin - position;
-            position = fin;
-        } else {
-            while (ligne[longueur] != '\0') longueur++;
-        }
-        if (isoler_mot(ligne, longueur)) {
+        if (isoler_mot(ligne)) {
             int ajout = inserer_mot(t, ligne);
-            if (ajout < 0 || (ajout > 0 && *nbMots == maxInt)) return ERREUR_CONTENU;
+            if (ajout < 0 || (ajout > 0 && *nbMots == INT_MAX)) return ERREUR_CONTENU;
             *nbMots += ajout;
         }
     }
-
     if (ferror(fichier)) return ERREUR_FICHIER;
     return *nbMots == 0 ? ERREUR_CONTENU : 0;
 }
@@ -68,21 +53,18 @@ int charger_dictionnaire(const char *chemin, Trie *t, int *nbMots) {
     *nbMots = 0;
     FILE *fichier = fopen(chemin, "rb");
     if (fichier == NULL) return ERREUR_FICHIER;
-
-    int maximum = 0;
-    int contientNul = 0;
-    int resultat = mesurer_lignes(fichier, &maximum, &contientNul);
+    size_t maximum = 0;
+    int resultat = mesurer_lignes(fichier, &maximum);
     if (resultat == 0) {
-        char *ligne = malloc((size_t) maximum + 2);
+        char *ligne = malloc(maximum + 2);
         if (ligne == NULL) {
             resultat = ERREUR_CONTENU;
         } else {
             rewind(fichier);
-            resultat = lire_mots(fichier, ligne, maximum + 2, contientNul, t, nbMots);
+            resultat = lire_mots(fichier, ligne, (int) maximum + 2, t, nbMots);
             free(ligne);
         }
     }
-
     if (fclose(fichier) != 0 && resultat == 0) resultat = ERREUR_FICHIER;
     if (resultat != 0) {
         liberer_trie(*t);

@@ -47,5 +47,6 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Mémoire insuffisante pour la recherche\n");
         return ERREUR_CONTENU;
     }
-    return longueur == 0;
+    if (longueur > 0) return 0;
+    return 1;
 }

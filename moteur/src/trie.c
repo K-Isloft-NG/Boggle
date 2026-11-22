@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 #include "trie.h"
 
@@ -16,6 +17,7 @@ Trie nouveau_noeud(char elem) {
 
 // Cherche la lettre ou la relie à la fin de la liste.
 Trie chercher_inserer(Trie *t, char x) {
+    assert(t != NULL);
     if (*t == NULL) {
         *t = nouveau_noeud(x);
         return *t;
@@ -26,6 +28,8 @@ Trie chercher_inserer(Trie *t, char x) {
 
 // Descend d'un fils par lettre et marque la dernière.
 int inserer_mot(Trie *t, const char *mot) {
+    assert(t != NULL);
+    assert(mot != NULL && *mot != '\0');
     Trie noeud = chercher_inserer(t, *mot);
     if (noeud == NULL) return -1;
     if (*(mot + 1) != '\0') return inserer_mot(&noeud->fils, mot + 1);

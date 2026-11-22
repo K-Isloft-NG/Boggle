@@ -9,19 +9,15 @@ int lire_entier(const char *texte, int *valeur) {
     assert(texte != NULL);
     assert(valeur != NULL);
 
-    char reste;
-    const char *p = texte;
-    while (*p == ' ' || *p == '\t' || *p == '\n' || *p == '\r' || *p == '\v' || *p == '\f') p++;
-    if (*p == '+') p++;
-    while (*p == '0') p++;
-    int chiffres = 0;
-    while (*p >= '0' && *p <= '9') {
-        chiffres++;
-        if (chiffres > 4) return 0;
-        p++;
+    if (*texte == '\0') return 0;
+    int n = 0;
+    for (int i = 0; texte[i] != '\0'; i++) {
+        if (texte[i] < '0' || texte[i] > '9') return 0;
+        n = n * 10 + texte[i] - '0';
+        if (n > 1000) return 0;
     }
-    if (*p != '\0') return 0;
-    return sscanf(texte, "%d%c", valeur, &reste) == 1 && *valeur >= 1 && *valeur <= 1000;
+    *valeur = n;
+    return n >= 1;
 }
 
 // Vérifie chaque case avant de conserver le tableau d'arguments.

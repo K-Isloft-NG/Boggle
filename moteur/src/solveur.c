@@ -3,13 +3,13 @@
 #include "solveur.h"
 
 // Cherche une lettre dans la liste de frères.
-static int chercher_frere(const CelluleLex *cellules, int tete, char lettre) {
+static int trouver_lettre(const CelluleLex *cellules, int tete, char lettre) {
     assert(cellules != NULL);
     assert(tete >= 0 || tete == ABSENT_LEX);
 
     if (tete == ABSENT_LEX) return ABSENT_LEX;
     if (cellules[tete].elem == lettre) return tete;
-    return chercher_frere(cellules, cellules[tete].frere, lettre);
+    return trouver_lettre(cellules, cellules[tete].frere, lettre);
 }
 
 // Avance dans le Trie avec toutes les lettres de la case, puis essaie ses voisins.
@@ -22,7 +22,7 @@ static void explorer(ContexteSolveur *ctx, int indice, int tete, FILE *sortie) {
     const char *texte = g->cases[indice];
     int n = tete;
     for (int i = 0; texte[i] != '\0'; i++) {
-        n = chercher_frere(ctx->cellules, n, texte[i]);
+        n = trouver_lettre(ctx->cellules, n, texte[i]);
         if (n == ABSENT_LEX) return;
         if (texte[i + 1] != '\0') n = ctx->cellules[n].fils;
     }

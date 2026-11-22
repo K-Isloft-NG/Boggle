@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <string.h>
 #include "codes.h"
@@ -6,9 +7,8 @@
 
 // Numérote le nœud, ses fils puis ses frères, et renvoie la taille obtenue.
 static long numeroter(Trie t, long debut) {
-    const int maxInt = (int)(~0u >> 1);
     if (t == NULL) return 0;
-    if (debut >= maxInt) return -1;
+    if (debut >= INT_MAX) return -1;
 
     t->num = (int) debut;
     long fils = numeroter(t->fils, debut + 1);
@@ -36,6 +36,7 @@ static int ecrire_cellules(FILE *f, Trie t) {
 
 // Écrit l'en-tête et les cellules, puis retire un fichier incomplet.
 int ecrire_lex(Trie t, int nbMots, const char *chemin) {
+    assert(chemin != NULL);
     long nombre = numeroter(t, 0);
     if (nombre <= 0) return ERREUR_FICHIER;
 
@@ -54,6 +55,8 @@ int ecrire_lex(Trie t, int nbMots, const char *chemin) {
 
 // Vérifie que le fichier a les dimensions annoncées par l'en-tête.
 int lire_entete(FILE *f, EnteteLex *h) {
+    assert(f != NULL);
+    assert(h != NULL);
     if (fread(h, sizeof(*h), 1, f) != 1) return ERREUR_CONTENU;
     if (h->tailleEntete != sizeof(*h) || h->tailleCellule != sizeof(CelluleLex) ||
         h->nbMots < 0 || h->nbCellules < 1) return ERREUR_CONTENU;
@@ -72,6 +75,9 @@ static int liens_valides(const CelluleLex *c, int num, int nbCellules) {
 
 // Accède à une cellule par son déplacement depuis le début du fichier.
 int lire_cellule(FILE *f, const EnteteLex *h, int num, CelluleLex *c) {
+    assert(f != NULL);
+    assert(h != NULL);
+    assert(c != NULL);
     if (num < 0 || num >= h->nbCellules) return ERREUR_CONTENU;
     long position = h->tailleEntete + (long) num * h->tailleCellule;
     if (fseek(f, position, SEEK_SET) != 0) return ERREUR_CONTENU;
@@ -91,7 +97,8 @@ int charger_cellules(FILE *f, const EnteteLex *h, CelluleLex **cellules) {
         return ERREUR_CONTENU;
 
     size_t nombre = (size_t) h->nbCellules;
-    if (nombre > (size_t) -1 / sizeof(CelluleLex)) return ERREUR_FICHIER;
+    // Le dictionnaire réel contient environ trois millions de cellules.
+    if (h->nbCellules > 200000000) return ERREUR_CONTENU;
     CelluleLex *donnees = malloc(nombre * sizeof(*donnees));
     if (donnees == NULL) return ERREUR_FICHIER;
 
@@ -121,6 +128,8 @@ static int chercher_frere(FILE *f, const EnteteLex *h, int num, char lettre,
 
 // Suit une lettre par niveau jusqu'à identifier le mot ou le préfixe.
 int statut_mot(FILE *f, const EnteteLex *h, int num, const char *mot) {
+    assert(f != NULL && h != NULL);
+    assert(mot != NULL);
     CelluleLex cellule;
     int resultat = chercher_frere(f, h, num, *mot, &cellule, 26);
     if (resultat != LEX_PRESENT) return resultat;
