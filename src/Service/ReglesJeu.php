@@ -15,6 +15,21 @@ final class ReglesJeu
     /** Longueur minimale d'un mot, comptée en lettres. */
     public const LONGUEUR_MINIMALE_MOT = 3;
 
+    /** Nombre de lignes de la grille. */
+    public const HAUTEUR_GRILLE = 4;
+
+    /** Nombre de colonnes de la grille. */
+    public const LARGEUR_GRILLE = 4;
+
+    /** Durée d'une partie, en secondes. */
+    public const DUREE_PARTIE_S = 180;
+
+    /** Nombre maximal de lettres pour 16 cases de deux lettres. */
+    public const LONGUEUR_MAX_SAISIE = 32;
+
+    /** Borne les appels au moteur au cours d'une partie. */
+    public const PROPOSITIONS_MAX = 200;
+
     /**
      * Lettres accentuées ramenées à A-Z, comme le fait le module Java pour le dictionnaire
      * (marques diacritiques retirées, ligatures Œ et Æ développées).

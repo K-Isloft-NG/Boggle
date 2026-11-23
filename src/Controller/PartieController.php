@@ -3,12 +3,17 @@ declare(strict_types=1);
 
 namespace Boogle\Controller;
 
+use Boogle\Core\Config;
 use Boogle\Core\Router;
 use Boogle\Core\Session;
 use Boogle\Core\View;
+use Boogle\Service\Moteur;
+use Boogle\Service\MoteurException;
+use Boogle\Service\PartieService;
+use InvalidArgumentException;
 
 /**
- * Liste des parties. Les données sont fictives : le moteur de jeu n'est pas encore branché.
+ * Partie solo en session et liste de démonstration.
  * Le paramètre etat=vide affiche la démonstration de l'état sans partie.
  */
 final class PartieController
@@ -20,6 +25,24 @@ final class PartieController
         ['date' => '02/11/2026', 'adversaires' => 'Marie, Camille', 'score' => 18, 'mots' => 7,  'statut' => 'Abandonnée'],
         ['date' => '29/10/2026', 'adversaires' => 'Paul',          'score' => 55, 'mots' => 19, 'statut' => 'Terminée'],
     ];
+
+    private const MOTIFS = [
+        'trop_court'         => 'trop court',
+        'doublon'           => 'déjà proposé',
+        'absent_grille'     => 'absent de la grille',
+        'absent_dictionnaire' => 'absent du dictionnaire',
+    ];
+
+    private readonly PartieService $service;
+
+    public function __construct()
+    {
+        $this->service = new PartieService(new Moteur(
+            Config::obtenir('MOTEUR_BIN', '/opt/boogle/moteur/bin'),
+            Config::obtenir('MOTEUR_DICO', '/opt/boogle/donnees/dico.lex'),
+            Config::obtenir('MOTEUR_FREQUENCES', '/opt/boogle/donnees/chartable.txt')
+        ));
+    }
 
     public function liste(): void
     {
@@ -34,7 +57,79 @@ final class PartieController
 
     public function nouvelle(): void
     {
-        Session::ajouterMessage('info', 'La création de partie sera disponible avec le moteur de jeu.');
-        Router::rediriger('parties');
+        try {
+            $this->service->demarrer();
+        } catch (MoteurException $erreur) {
+            $this->signalerErreurMoteur($erreur);
+            Router::rediriger('parties');
+        }
+
+        Router::rediriger('partie');
+    }
+
+    public function afficher(): void
+    {
+        try {
+            $partie = $this->service->partieEnCours();
+        } catch (MoteurException $erreur) {
+            $this->signalerErreurMoteur($erreur);
+            Router::rediriger('partie');
+        }
+
+        if ($partie === null) {
+            Session::ajouterMessage('info', 'Lancez une nouvelle partie pour jouer.');
+            Router::rediriger('parties');
+        }
+
+        if ($partie['terminee']) {
+            View::rendre('resultat', ['titre' => 'Partie terminée', 'partie' => $partie, 'motifs' => self::MOTIFS]);
+            return;
+        }
+
+        View::rendre('partie', [
+            'titre'   => 'Partie en cours',
+            'partie'  => $partie,
+            'motifs'  => self::MOTIFS,
+            'secondesRestantes' => $this->service->secondesRestantes(),
+        ]);
+    }
+
+    public function proposer(): void
+    {
+        $saisie = $_POST['mot'] ?? '';
+        try {
+            $proposition = $this->service->proposer(is_string($saisie) ? $saisie : '');
+            $mot = $proposition['mot'];
+            if ($proposition['valide']) {
+                $points = $proposition['points'];
+                $unite = $points === 1 ? 'point' : 'points';
+                Session::ajouterMessage('succes', "$mot : $points $unite");
+            } else {
+                Session::ajouterMessage('erreur', $mot . ' : ' . self::MOTIFS[$proposition['motif_rejet']]);
+            }
+        } catch (InvalidArgumentException $erreur) {
+            Session::ajouterMessage('erreur', $erreur->getMessage());
+        } catch (MoteurException $erreur) {
+            $this->signalerErreurMoteur($erreur);
+        }
+
+        Router::rediriger('partie');
+    }
+
+    public function terminer(): void
+    {
+        try {
+            $this->service->terminer();
+        } catch (MoteurException $erreur) {
+            $this->signalerErreurMoteur($erreur);
+        }
+
+        Router::rediriger('partie');
+    }
+
+    private function signalerErreurMoteur(MoteurException $erreur): void
+    {
+        error_log($erreur->getMessage());
+        Session::ajouterMessage('erreur', 'Le moteur de jeu est indisponible pour le moment.');
     }
 }

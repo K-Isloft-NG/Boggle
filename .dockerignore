@@ -1,5 +1,9 @@
 .git
-.env.local
-.env
+.env*
+!.env.example
 logs/*
 README.md
+moteur/bin
+moteur/obj
+jdict
+**/*.lex

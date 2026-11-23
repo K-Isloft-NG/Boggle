@@ -746,3 +746,46 @@ h2 {
         display: none;
     }
 }
+
+/* Partie */
+.partie-jeu .carte {
+    margin-bottom: var(--space-5);
+}
+
+.partie-jeu .minuteur {
+    margin: 0;
+    color: var(--color-accent);
+}
+
+.partie-plateau {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-6);
+}
+
+.partie-commandes {
+    display: grid;
+    gap: var(--space-4);
+    width: min(100%, 24rem);
+}
+
+.partie-jeu li {
+    overflow-wrap: anywhere;
+}
+
+.partie-solutions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+    gap: var(--space-2) var(--space-5);
+}
+
+@media (max-width: 640px) {
+    .partie-plateau {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .partie-jeu .grille {
+        --tile-size: min(60px, 14vw);
+    }
+}
