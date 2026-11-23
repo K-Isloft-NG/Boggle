@@ -20,7 +20,7 @@ public final class DictionaryBuilder {
 
     /** Construit le dictionnaire et signale la progression de la lecture. */
     public BuildReport build(DumpReader reader, LanguageExtractor extractor, DefinitionFileWriter writer,
-            LongConsumer progress) throws IOException {
+            IndexBuilder index, LongConsumer progress) throws IOException {
         Counters counts = new Counters();
         try {
             reader.forEachPage(page -> {
@@ -31,7 +31,7 @@ public final class DictionaryBuilder {
                 Optional<DictionaryEntry> entry = extractor.extract(page);
                 if (entry.isPresent()) {
                     try {
-                        writer.write(entry.get());
+                        index.add(writer.write(entry.get()));
                         counts.entries++;
                     } catch (IOException error) {
                         // Le traitement passé au lecteur ne peut pas lever d'exception contrôlée.

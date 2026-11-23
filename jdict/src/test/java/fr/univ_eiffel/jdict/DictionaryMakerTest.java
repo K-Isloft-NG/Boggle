@@ -36,7 +36,9 @@ final class DictionaryMakerTest {
         JSONObject header = new JSONObject(lines.get(0));
         assertEquals("fr", header.getString("language"));
         assertEquals("20261116T083000Z", header.getString("created_on"));
-        assertEquals("Termine : 11 pages lues, 7 entrees ecrites\n", diagnostics.toString(StandardCharsets.US_ASCII));
+        assertEquals("Termine : 11 pages lues, 7 entrees ecrites\nIndex ecrit : 7 entrees\n",
+                diagnostics.toString(StandardCharsets.US_ASCII));
+        assertEquals(64, Files.size(directory.resolve("definitions.index")));
     }
 
     @Test

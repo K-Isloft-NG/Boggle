@@ -29,11 +29,14 @@ final class DictionaryBuilderTest {
         Path file = directory.resolve("definitions.dict");
         DefinitionFileHeader header = DefinitionFileHeader.forLanguage("fr", Instant.EPOCH);
         InputStream xml = DictionaryBuilderTest.class.getClassLoader().getResourceAsStream("mini-dump-fr.xml");
+        IndexBuilder index = new IndexBuilder();
         try (DumpReader reader = new DumpReader(xml);
                 DefinitionFileWriter writer = new DefinitionFileWriter(file, header, new JsonEntrySerializer(), new PlainCodec())) {
             DictionaryBuilder.BuildReport report =
-                    new DictionaryBuilder().build(reader, new FrenchExtractor(), writer, count -> fail("Progression inattendue"));
+                    new DictionaryBuilder().build(reader, new FrenchExtractor(), writer, index,
+                            count -> fail("Progression inattendue"));
             assertEquals(new DictionaryBuilder.BuildReport(11, 7), report);
+            assertEquals(report.entries(), index.size());
         }
 
         List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8);

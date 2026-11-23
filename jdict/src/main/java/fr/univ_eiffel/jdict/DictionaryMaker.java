@@ -1,10 +1,12 @@
 package fr.univ_eiffel.jdict;
 
 import fr.univ_eiffel.jdict.build.DictionaryBuilder;
+import fr.univ_eiffel.jdict.build.IndexBuilder;
 import fr.univ_eiffel.jdict.dump.DumpReader;
 import fr.univ_eiffel.jdict.language.LanguageExtractor;
 import fr.univ_eiffel.jdict.language.LanguageExtractors;
 import fr.univ_eiffel.jdict.model.DefinitionFileHeader;
+import fr.univ_eiffel.jdict.store.BinaryIndexWriter;
 import fr.univ_eiffel.jdict.store.DefinitionFileWriter;
 import fr.univ_eiffel.jdict.store.JsonEntrySerializer;
 import fr.univ_eiffel.jdict.store.PlainCodec;
@@ -45,17 +47,22 @@ public final class DictionaryMaker {
 
         Path file = Path.of(args[1] + ".dict");
         DefinitionFileHeader header = DefinitionFileHeader.forLanguage(extractor.languageCode(), clock.instant());
+        IndexBuilder index = new IndexBuilder();
         DictionaryBuilder.BuildReport report;
-        try (DumpReader reader = DumpReader.fromBzip2(in);
-                DefinitionFileWriter writer = new DefinitionFileWriter(file, header, new JsonEntrySerializer(), new PlainCodec())) {
-            report = new DictionaryBuilder().build(reader, extractor, writer,
-                    pages -> err.print("Pages lues : " + pages + "\n"));
+        try {
+            try (DumpReader reader = DumpReader.fromBzip2(in);
+                    DefinitionFileWriter writer = new DefinitionFileWriter(file, header, new JsonEntrySerializer(), new PlainCodec())) {
+                report = new DictionaryBuilder().build(reader, extractor, writer, index,
+                        pages -> err.print("Pages lues : " + pages + "\n"));
+            }
+            new BinaryIndexWriter().write(Path.of(args[1] + ".index"), index.sortedEntries());
         } catch (IOException error) {
             err.print("Erreur : " + ConsoleMessages.ascii(error.getMessage()) + "\n");
             return 1;
         }
 
         err.print("Termine : " + report.pages() + " pages lues, " + report.entries() + " entrees ecrites\n");
+        err.print("Index ecrit : " + index.size() + " entrees\n");
         return 0;
     }
 }
