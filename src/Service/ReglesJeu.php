@@ -30,6 +30,21 @@ final class ReglesJeu
     /** Borne les appels au moteur au cours d'une partie. */
     public const PROPOSITIONS_MAX = 200;
 
+    /** Code de langue du dictionnaire utilisé par le jeu. */
+    public const LANGUE_DICTIONNAIRE = 'fr';
+
+    /** Nom du barème appliqué par le moteur. */
+    public const POLITIQUE_SCORE = 'classique';
+
+    /** Version du format des données enregistrées. */
+    public const VERSION_FORMAT_PARTIE = 1;
+
+    /** Statut d'une partie menée à son résultat. */
+    public const STATUT_TERMINEE = 'terminee';
+
+    /** Statut d'une partie abandonnée. */
+    public const STATUT_ANNULEE = 'annulee';
+
     /**
      * Lettres accentuées ramenées à A-Z, comme le fait le module Java pour le dictionnaire
      * (marques diacritiques retirées, ligatures Œ et Æ développées).

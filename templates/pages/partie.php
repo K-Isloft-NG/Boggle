@@ -36,6 +36,10 @@ $fin = $partie['debut'] + $partie['duree_s'];
                 <?= Csrf::champ() ?>
                 <button class="bouton bouton--secondaire" type="submit">Terminer la partie</button>
             </form>
+            <form method="post" action="/?page=abandonner-partie">
+                <?= Csrf::champ() ?>
+                <button class="bouton bouton--secondaire" type="submit">Abandonner sans résultat</button>
+            </form>
         </div>
     </div>
 

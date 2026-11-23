@@ -67,6 +67,11 @@ $routeur = new Router([
         'actions'    => ['POST' => 'terminer'],
         'prive'      => true,
     ],
+    'abandonner-partie' => [
+        'controleur' => PartieController::class,
+        'actions'    => ['POST' => 'abandonner'],
+        'prive'      => true,
+    ],
 ]);
 
 $routeur->repartir();

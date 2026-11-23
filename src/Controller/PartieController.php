@@ -4,9 +4,12 @@ declare(strict_types=1);
 namespace Boogle\Controller;
 
 use Boogle\Core\Config;
+use Boogle\Core\Database;
 use Boogle\Core\Router;
 use Boogle\Core\Session;
 use Boogle\Core\View;
+use Boogle\Repository\PartieRepository;
+use Boogle\Service\EnregistrementPartieService;
 use Boogle\Service\Moteur;
 use Boogle\Service\MoteurException;
 use Boogle\Service\PartieService;
@@ -37,11 +40,15 @@ final class PartieController
 
     public function __construct()
     {
-        $this->service = new PartieService(new Moteur(
+        $moteur = new Moteur(
             Config::obtenir('MOTEUR_BIN', '/opt/boogle/moteur/bin'),
             Config::obtenir('MOTEUR_DICO', '/opt/boogle/donnees/dico.lex'),
             Config::obtenir('MOTEUR_FREQUENCES', '/opt/boogle/donnees/chartable.txt')
-        ));
+        );
+        $enregistrement = new EnregistrementPartieService(
+            static fn (): PartieRepository => new PartieRepository(Database::connexion())
+        );
+        $this->service = new PartieService($moteur, $enregistrement);
     }
 
     public function liste(): void
@@ -125,6 +132,16 @@ final class PartieController
         }
 
         Router::rediriger('partie');
+    }
+
+    public function abandonner(): void
+    {
+        $this->service->abandonner();
+        $message = $this->service->abandonNonEnregistre()
+            ? "Partie abandonnée, mais elle n'a pas pu être enregistrée."
+            : 'Partie abandonnée.';
+        Session::ajouterMessage('info', $message);
+        Router::rediriger('parties');
     }
 
     private function signalerErreurMoteur(MoteurException $erreur): void

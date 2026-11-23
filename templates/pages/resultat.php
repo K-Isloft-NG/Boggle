@@ -36,6 +36,10 @@ usort($aTrouver, static function (string $a, string $b): int {
         </form>
     </div>
 
+    <?php if (($partie['enregistrement'] ?? null) === 'echec'): ?>
+        <p class="message message--info" role="status">Cette partie n'a pas pu être enregistrée.</p>
+    <?php endif; ?>
+
     <div class="carte partie-plateau">
         <?php require RACINE . '/templates/partials/grille.php'; ?>
         <div>
