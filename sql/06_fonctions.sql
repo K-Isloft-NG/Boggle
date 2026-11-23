@@ -84,15 +84,28 @@ $fonction$;
 COMMENT ON FUNCTION boggle.classement_partie(integer) IS
     'Classe les joueurs par leur score enregistré, avec un même rang pour les ex aequo.';
 
+-- Le type de retour change : PostgreSQL impose de supprimer l'ancienne fonction.
+DROP FUNCTION IF EXISTS boggle.parties_du_joueur(integer);
+
 CREATE OR REPLACE FUNCTION boggle.parties_du_joueur(p_id_utilisateur integer)
 RETURNS TABLE (
     id_partie integer, statut text, date_debut timestamptz,
-    score integer, rang integer, nb_joueurs integer
+    score integer, rang integer, nb_joueurs integer, adversaires text, mots_trouves integer
 )
 LANGUAGE sql STABLE RETURNS NULL ON NULL INPUT
 AS $fonction$
     SELECT p.id_partie, p.statut::text, p.date_debut, (j.valeur->>'score')::integer,
-           (c.valeur->>'rang')::integer, jsonb_array_length(p.donnees->'joueurs')
+           (c.valeur->>'rang')::integer, jsonb_array_length(p.donnees->'joueurs'),
+           (SELECT string_agg(u.pseudo::text, ', ' ORDER BY u.pseudo)
+            FROM boggle.participation autre
+            JOIN public.php_utilisateurs u ON u.id = autre.id_utilisateur
+            WHERE autre.id_partie = p.id_partie AND autre.id_utilisateur <> pa.id_utilisateur),
+           (SELECT count(*)::integer
+            FROM jsonb_array_elements(
+                CASE WHEN jsonb_typeof(j.valeur->'propositions') = 'array'
+                     THEN j.valeur->'propositions' ELSE '[]'::jsonb END
+            ) AS proposition(valeur)
+            WHERE proposition.valeur->'valide' = 'true'::jsonb)
     FROM boggle.participation pa
     JOIN boggle.partie p ON p.id_partie = pa.id_partie
     LEFT JOIN LATERAL jsonb_array_elements(p.donnees->'joueurs') AS j(valeur)
@@ -106,7 +119,7 @@ AS $fonction$
 $fonction$;
 
 COMMENT ON FUNCTION boggle.parties_du_joueur(integer) IS
-    'Liste les parties du joueur en partant de ses participations.';
+    'Liste les parties du joueur, ses adversaires et son nombre de mots trouvés.';
 
 CREATE OR REPLACE FUNCTION boggle.enregistrer_partie(
     p_id_dictionnaire integer, p_statut text, p_date_debut timestamptz,

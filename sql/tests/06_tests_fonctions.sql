@@ -91,23 +91,35 @@ SELECT count(*) AS ecarts FROM differences;
 \echo 'CT-FN-03 : classement inexistant (écarts attendus : 0)'
 SELECT count(*) AS ecarts FROM boggle.classement_partie(-1);
 
-\echo 'CT-FN-04 : parties de 9001 dans le bon ordre et partie de 9005 (écarts attendus : 0)'
+\echo 'CT-FN-04 : historique des cinq joueurs (écarts attendus : 0)'
 WITH obtenu AS (
     SELECT u.id_utilisateur, p.ordinality, p.id_partie, p.statut, p.date_debut,
-           p.score, p.rang, p.nb_joueurs
-    FROM (VALUES (9001), (9005)) AS u(id_utilisateur)
+           p.score, p.rang, p.nb_joueurs, p.adversaires, p.mots_trouves
+    FROM (VALUES (9001), (9002), (9003), (9004), (9005)) AS u(id_utilisateur)
     CROSS JOIN LATERAL boggle.parties_du_joueur(u.id_utilisateur) WITH ORDINALITY AS p
 ), attendu AS (
     VALUES
-        (9001, 1, 9003, 'en_cours', timestamptz '2026-11-04 18:05+01', 1, NULL, 2),
-        (9001, 2, 9001, 'terminee', timestamptz '2026-11-02 18:05+01', 3, 1,    2),
-        (9005, 1, 9005, 'annulee',  timestamptz '2026-11-06 18:05+01', 0, NULL, 2)
+        (9001, 1, 9003, 'en_cours', timestamptz '2026-11-04 18:05+01', 1, NULL, 2, 'test_hugo', 1),
+        (9001, 2, 9001, 'terminee', timestamptz '2026-11-02 18:05+01', 3, 1, 2, 'test_mamie', 3),
+        (9002, 1, 9006, 'terminee', timestamptz '2026-11-07 18:05+01', 4, 1, 2, 'test_hugo', 3),
+        (9002, 2, 9001, 'terminee', timestamptz '2026-11-02 18:05+01', 2, 2, 2, 'test_karl', 2),
+        (9003, 1, 9002, 'terminee', timestamptz '2026-11-03 18:05+01', 2, 1, 2, 'test_hugo', 2),
+        (9003, 2, 9004, 'en_attente', NULL::timestamptz, 0, NULL, 1, NULL::text, 0),
+        (9004, 1, 9006, 'terminee', timestamptz '2026-11-07 18:05+01', 2, 2, 2, 'test_mamie', 2),
+        (9004, 2, 9005, 'annulee', timestamptz '2026-11-06 18:05+01', 1, NULL, 2, 'test_inactif', 1),
+        (9004, 3, 9003, 'en_cours', timestamptz '2026-11-04 18:05+01', 1, NULL, 2, 'test_karl', 1),
+        (9004, 4, 9002, 'terminee', timestamptz '2026-11-03 18:05+01', 2, 1, 2, 'test_lea', 2),
+        (9005, 1, 9005, 'annulee', timestamptz '2026-11-06 18:05+01', 0, NULL, 2, 'test_hugo', 0)
 ), differences AS (
     (SELECT * FROM obtenu EXCEPT ALL SELECT * FROM attendu)
     UNION ALL
     (SELECT * FROM attendu EXCEPT ALL SELECT * FROM obtenu)
 )
 SELECT count(*) AS ecarts FROM differences;
+
+\echo 'CT-FN-04 : joueur inexistant et NULL (écarts attendus : 0)'
+SELECT (SELECT count(*) FROM boggle.parties_du_joueur(-1))
+     + (SELECT count(*) FROM boggle.parties_du_joueur(NULL)) AS ecarts;
 
 \echo 'CT-FN-07 : partie terminée, classement remplacé, date passée et deux participations (écarts attendus : 0)'
 BEGIN;
