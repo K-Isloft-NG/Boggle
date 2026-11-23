@@ -11,4 +11,4 @@ function e(mixed $valeur): string
 }
 
 /** Grille d'exemple utilisée pour illustrer le jeu : 16 lettres, lues ligne par ligne. */
-const GRILLE_DEMO = ['B', 'O', 'O', 'G', 'S', 'A', 'E', 'L', 'N', 'I', 'M', 'U', 'T', 'E', 'R', 'D'];
+const GRILLE_DEMO = ['B', 'O', 'G', 'E', 'S', 'A', 'G', 'L', 'N', 'I', 'M', 'U', 'T', 'E', 'R', 'D'];

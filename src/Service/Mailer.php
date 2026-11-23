@@ -14,7 +14,7 @@ final class Mailer
     public function envoyer(string $destinataire, string $sujet, string $texte, string $html): bool
     {
         $corps = json_encode([
-            'sender'      => ['name' => 'Boogle', 'email' => Config::obtenir('MAIL_EXPEDITEUR')],
+            'sender'      => ['name' => 'Boggle', 'email' => Config::obtenir('MAIL_EXPEDITEUR')],
             'to'          => [['email' => $destinataire]],
             'subject'     => $sujet,
             'textContent' => $texte,

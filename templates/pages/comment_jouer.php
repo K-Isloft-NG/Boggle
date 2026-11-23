@@ -9,7 +9,7 @@ $description = 'Grille de 16 lettres où les cases A, N et E sont mises en évid
 ?>
 <article class="regles-detail">
     <h1>Comment jouer</h1>
-    <p class="chapeau">Boogle se joue sur une grille de 16 lettres. Votre but : trouver le plus de mots possible avant la fin du temps.</p>
+    <p class="chapeau">Boggle se joue sur une grille de 16 lettres. Votre but : trouver le plus de mots possible avant la fin du temps.</p>
 
     <h2>La grille</h2>
     <p>Chaque partie commence par une grille de 4 lettres sur 4, tirée au hasard. Certaines cases affichent deux lettres liées, comme QU : elles comptent ensemble, comme une seule case.</p>

@@ -20,7 +20,7 @@ final class View
 
         http_response_code($statut);
         echo self::capturer($dossier . '/layout.php', [
-            'titre'    => $donnees['titre'] ?? 'Boogle',
+            'titre'    => $donnees['titre'] ?? 'Boggle',
             'contenu'  => $contenu,
             'messages' => Session::recupererMessages(),
         ]);

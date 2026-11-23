@@ -15,7 +15,7 @@ use Boogle\Core\Session;
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= e($titre) ?> | Boogle</title>
+    <title><?= e($titre) ?> | Boggle</title>
     <link rel="preload" href="/assets/fonts/geist-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
@@ -26,7 +26,7 @@ use Boogle\Core\Session;
         <div class="entete-interieur">
             <a class="marque" href="/">
                 <span class="marque-logo" aria-hidden="true"><?php for ($i = 0; $i < 9; $i++): ?><span></span><?php endfor; ?></span>
-                Boogle
+                Boggle
             </a>
             <nav class="entete-nav" aria-label="Navigation principale">
                 <a class="lien" href="/?page=comment-jouer">Comment jouer</a>
@@ -53,7 +53,7 @@ use Boogle\Core\Session;
 
     <footer class="pied">
         <div class="pied-interieur">
-            <p class="pied-mention">© <?= date('Y') ?> Boogle. Projet de SAÉ, BUT Informatique, Université Gustave Eiffel.</p>
+            <p class="pied-mention">© <?= date('Y') ?> Boggle. Projet de SAÉ, BUT Informatique, Université Gustave Eiffel.</p>
             <nav class="pied-nav" aria-label="Liens du pied de page">
                 <a class="lien" href="/">Accueil</a>
                 <a class="lien" href="/?page=comment-jouer">Comment jouer</a>

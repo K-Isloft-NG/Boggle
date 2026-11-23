@@ -49,18 +49,18 @@ final class ReinitialisationService
         $lien = rtrim(Config::obtenir('APP_URL'), '/') . '/?page=reinitialisation&jeton=' . $jeton;
 
         $texte = "Bonjour {$utilisateur->pseudo},\n\n"
-            . "Vous avez demandé à changer votre mot de passe Boogle. Ouvrez ce lien pour en choisir un nouveau :\n\n"
+            . "Vous avez demandé à changer votre mot de passe Boggle. Ouvrez ce lien pour en choisir un nouveau :\n\n"
             . "{$lien}\n\n"
             . "Ce lien est valable 30 minutes et ne fonctionne qu'une seule fois.\n"
             . "Si vous n'êtes pas à l'origine de cette demande, ignorez ce message : votre mot de passe reste inchangé.\n";
 
         $html = '<p>Bonjour ' . e($utilisateur->pseudo) . ',</p>'
-            . '<p>Vous avez demandé à changer votre mot de passe Boogle.</p>'
+            . '<p>Vous avez demandé à changer votre mot de passe Boggle.</p>'
             . '<p><a href="' . e($lien) . '">Choisir un nouveau mot de passe</a></p>'
             . '<p>Ce lien est valable 30 minutes et ne fonctionne qu’une seule fois.</p>'
             . '<p>Si vous n’êtes pas à l’origine de cette demande, ignorez ce message : votre mot de passe reste inchangé.</p>';
 
-        if (!$this->mailer->envoyer($utilisateur->email, 'Boogle : choisir un nouveau mot de passe', $texte, $html)) {
+        if (!$this->mailer->envoyer($utilisateur->email, 'Boggle : choisir un nouveau mot de passe', $texte, $html)) {
             error_log('Réinitialisation : l’e-mail n’a pas pu être envoyé pour l’utilisateur n°' . $utilisateur->id);
         }
     }

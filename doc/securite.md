@@ -1,4 +1,4 @@
-# Note de sécurité : module PHP-Web de Boogle
+# Note de sécurité : module PHP-Web de Boggle
 
 Périmètre : site PHP (comptes, connexion, récupération de mot de passe, pages privées). Le moteur C, les dictionnaires Java et le chat ne sont pas encore branchés.
 

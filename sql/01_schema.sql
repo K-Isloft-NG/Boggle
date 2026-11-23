@@ -1,4 +1,4 @@
--- Boogle : schéma du module Dev Web (L3)
+-- Boggle : schéma du module Dev Web (L3)
 -- Tables préfixées php_ ; clés primaires en SERIAL.
 -- php_utilisateurs est la table des joueurs pour tout le projet : le module L2
 -- y fait référence (boggle.participation.id_utilisateur). Ne pas renommer la table ni la colonne id.

@@ -1,4 +1,4 @@
-/* Boogle : feuille de style, variante « Console claire ». */
+/* Boggle : feuille de style, variante « Console claire ». */
 
 /* Polices hébergées sur le site : aucune requête vers un service tiers. */
 @font-face {
@@ -770,6 +770,12 @@ h2 {
     width: min(100%, 24rem);
 }
 
+.partie-commandes .bouton--secondaire {
+    display: flex;
+    width: fit-content;
+    margin-inline: auto;
+}
+
 .partie-jeu li {
     overflow-wrap: anywhere;
 }
@@ -781,6 +787,30 @@ h2 {
 }
 
 @media (max-width: 640px) {
+    .entete-interieur {
+        padding-inline: var(--space-4);
+    }
+
+    .entete-interieur,
+    .entete-nav,
+    .entete-nav .session {
+        flex-wrap: wrap;
+        gap: var(--space-2);
+    }
+
+    .entete-nav {
+        margin-inline-start: auto;
+    }
+
+    .entete-nav > .lien,
+    .entete-nav .bouton {
+        white-space: nowrap;
+    }
+
+    .entete-nav .session-texte {
+        overflow-wrap: anywhere;
+    }
+
     .partie-plateau {
         grid-template-columns: minmax(0, 1fr);
     }

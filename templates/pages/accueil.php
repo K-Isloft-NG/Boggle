@@ -7,10 +7,10 @@
 use Boogle\Core\Csrf;
 use Boogle\Service\ReglesJeu;
 
-// Grille de démonstration : les cases actives forment le mot BOOGLE.
+// Grille de démonstration : les cases actives forment le mot BOGGLE.
 $lettres = GRILLE_DEMO;
 $actives = [0, 1, 2, 3, 6, 7];
-$description = 'Exemple de grille de 16 lettres où le mot BOOGLE est formé avec des lettres voisines';
+$description = 'Exemple de grille de 16 lettres où le mot BOGGLE est formé avec des lettres voisines';
 ?>
 <div class="accueil">
     <section class="accueil-presentation">
@@ -20,7 +20,7 @@ $description = 'Exemple de grille de 16 lettres où le mot BOOGLE est formé ave
 
         <figure class="grille-demo">
             <?php require RACINE . '/templates/partials/grille.php'; ?>
-            <figcaption class="legende">B·O·O·G·L·E : 6 lettres voisines</figcaption>
+            <figcaption class="legende">B·O·G·G·L·E : 6 lettres voisines</figcaption>
         </figure>
     </section>
 
